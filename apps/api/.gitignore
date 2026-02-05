@@ -1,0 +1,51 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build / output
+dist/
+build/
+
+# Variables de entorno (secretos)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Tests y cobertura
+coverage/
+.nyc_output/
+
+# Logs y runtime
+*.log
+logs/
+.pnpm-debug.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+.temp
+.tmp
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# Diagnostic reports (Node)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# IA / Cursor (solo local)
+.cursor/
+.agents/
+*.plan.md

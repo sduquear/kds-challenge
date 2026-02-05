@@ -1,0 +1,25 @@
+@import "./styles/variables.scss";
+
+.pk-logo {
+  border-radius: 8px;
+  &-- {
+    &S {
+      height: 32px;
+      width: auto !important;
+    }
+    &M {
+      width: auto !important;
+      height: 52px;
+    }
+    &L {
+      width: auto !important;
+      height: 84px;
+    }
+    &RED * {
+      fill: $cta;
+    }
+    &GREEN * {
+      fill: $tertiary;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build / output (Next.js)
+.next/
+out/
+build/
+
+# Variables de entorno (secretos)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Tests y cobertura
+coverage/
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+node_modules/.vite/
+
+# Logs y runtime
+*.log
+logs/
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# IA / Cursor (solo local)
+.cursor/
+.agents/
+*.plan.md

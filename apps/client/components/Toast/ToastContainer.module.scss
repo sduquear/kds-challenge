@@ -1,0 +1,135 @@
+@use "@/styles/variables.scss" as *;
+
+.container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: min(420px, calc(100vw - 2rem));
+  pointer-events: none;
+
+  // Allow clicks on toasts
+  :global(.toastClickable) {
+    pointer-events: auto;
+  }
+}
+
+.toast {
+  pointer-events: auto;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--border-radius, 12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: slideIn 0.3s ease-out;
+  }
+
+  &:hover {
+    opacity: 0.95;
+  }
+
+  &.info {
+    background: $gray-100;
+    color: $white;
+  }
+
+  &.success {
+    background: $tertiary;
+    color: $white;
+  }
+}
+
+[data-theme="dark"] {
+  .toast {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+
+    &.info {
+      background: $dark-border-strong;
+      color: $dark-text-primary;
+    }
+
+    &.success {
+      background: #059669;
+      color: #fff;
+    }
+  }
+
+  .icon {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .close:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  svg {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+}
+
+.close {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.85;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+
+  &:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "info": {
+    "name": "KDS API",
+    "description": "Colección de endpoints de la API KDS (Kitchen Display System) para gestión de pedidos, health check y simulación.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "kds-api"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000",
+      "type": "string"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Root",
+      "item": [
+        {
+          "name": "Hello",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            },
+            "description": "Endpoint raíz. Devuelve un mensaje de bienvenida para verificar que la API está en ejecución."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "description": "Comprobación de estado del servicio y dependencias (MongoDB).",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Comprueba el estado de la API y la conexión a MongoDB. Usa @nestjs/terminus (HealthCheck)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "CRUD de pedidos. Estados: PENDING, IN_PROGRESS, READY, DELIVERED.",
+      "item": [
+        {
+          "name": "Listar todos los pedidos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Obtiene todos los pedidos, ordenados por fecha de creación (más recientes primero)."
+          }
+        },
+        {
+          "name": "Crear pedido",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const json = pm.response.json();",
+                  "  if (json._id) {",
+                  "    pm.collectionVariables.set('orderId', json._id);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"externalId\": \"GLO-123\",\n  \"customerName\": \"Juan Pérez\",\n  \"items\": [\n    {\n      \"id\": \"1\",\n      \"name\": \"Hamburguesa KDS\",\n      \"image\": \"https://img.com/burger.png\",\n      \"price\": {\n        \"amount\": 1250,\n        \"currency\": \"EUR\"\n      },\n      \"quantity\": 2\n    },\n    {\n      \"id\": \"2\",\n      \"name\": \"Coca-Cola\",\n      \"price\": {\n        \"amount\": 250,\n        \"currency\": \"EUR\"\n      },\n      \"quantity\": 1\n    }\n  ],\n  \"status\": \"PENDING\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            },
+            "description": "Crea un nuevo pedido. Tras ejecutar, el _id del pedido se guarda en la variable de colección {{orderId}}.\n\n- **externalId** (opcional): 3 letras, guión, 3 dígitos (ej. GLO-123). Si se omite, se genera MAN-XXX.\n- **customerName** (requerido): Nombre del cliente.\n- **items** (requerido): Array de ítems. Cada ítem: id, name, price (amount en céntimos, currency), quantity. image opcional.\n- **status** (opcional): PENDING | IN_PROGRESS | READY | DELIVERED. Por defecto PENDING."
+          }
+        },
+        {
+          "name": "Obtener pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Obtiene un pedido por su ID (MongoDB _id). Usa la variable {{orderId}} (se rellena automáticamente al crear un pedido)."
+          }
+        },
+        {
+          "name": "Actualizar pedido",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Actualiza un pedido (parcial). Solo los campos enviados se modifican.\n\nEjemplos:\n- Cambiar estado: `{ \"status\": \"IN_PROGRESS\" }`, `\"READY\"` o `\"DELIVERED\"`\n- Cambiar nombre: `{ \"customerName\": \"María García\" }`\n- Cambiar ítems: `{ \"items\": [...] }`"
+          }
+        },
+        {
+          "name": "Eliminar pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Elimina un pedido por su ID (MongoDB _id)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Simulation",
+      "description": "Simulación de generación automática de pedidos para pruebas.",
+      "item": [
+        {
+          "name": "Estado de la simulación",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/simulation/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["simulation", "status"]
+            },
+            "description": "Devuelve el estado actual de la simulación: { \"isRunning\": true | false }."
+          }
+        },
+        {
+          "name": "Activar/Desactivar simulación",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/simulation/toggle",
+              "host": ["{{baseUrl}}"],
+              "path": ["simulation", "toggle"]
+            },
+            "description": "Alterna la simulación: inicia o detiene la generación automática de pedidos. Respuesta: { \"status\": \"started\" } o { \"status\": \"stopped\" }."
+          }
+        }
+      ]
+    }
+  ]
+}

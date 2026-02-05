@@ -1,0 +1,19 @@
+[
+  {
+    "_id": "order-e2e-1",
+    "externalId": "E2E-001",
+    "status": "PENDING",
+    "customerName": "Cliente E2E",
+    "items": [
+      {
+        "id": "item-1",
+        "name": "Pizza Margarita",
+        "quantity": 1,
+        "price": { "amount": 1200, "currency": "EUR" }
+      }
+    ],
+    "total": { "amount": 1200, "currency": "EUR" },
+    "createdAt": "2025-02-05T12:00:00.000Z",
+    "updatedAt": "2025-02-05T12:00:00.000Z"
+  }
+]

@@ -1,0 +1,39 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build / output
+dist/
+build/
+.next/
+out/
+
+# Variables de entorno (secretos)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Tests y cobertura
+coverage/
+.nyc_output/
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Logs y runtime
+*.log
+logs/
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Estado de Docker (generado por pnpm dev)
+.docker-status.txt
+
+# IA / Cursor (solo local, no subir)
+.cursor/
+.agents/
+*.plan.md

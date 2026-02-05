@@ -1,0 +1,44 @@
+@use "@/styles/variables.scss" as *;
+
+.btn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid $gray-700;
+  border-radius: 8px;
+  background-color: $gray-900;
+  color: $gray-100;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: $gray-800;
+    border-color: $gray-600;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $cta;
+    outline-offset: 2px;
+  }
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+[data-theme="dark"] {
+  .btn {
+    border-color: $dark-border-strong;
+    background-color: $dark-bg-elevated;
+    color: $dark-text-primary;
+
+    &:hover {
+      background-color: $dark-border;
+      border-color: $dark-text-muted;
+    }
+  }
+}
