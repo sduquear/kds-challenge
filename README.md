@@ -272,21 +272,19 @@ Desde **`apps/client`**:
 
 ## Deploy
 
-### Frontend (Vercel)
+El proyecto está preparado para desplegarse en [Railway](https://railway.app), que soporta WebSockets y permite subir el monorepo con frontend y backend en un mismo flujo.
 
-El cliente Next.js (`apps/client`) se despliega en [Vercel](https://vercel.com):
+### Railway (monorepo: API + Client)
 
-1. Importa el repo en Vercel y configura **Root Directory** = `apps/client`.
-2. Añade la variable de entorno `NEXT_PUBLIC_API_URL` con la URL pública de tu API (sin barra final), ej. `https://tu-api.railway.app`.
-3. Build y Output se detectan automáticamente (Next.js).
-
-### Backend (Railway, Render, Fly.io, etc.)
-
-La API (NestJS + MongoDB + WebSockets) debe desplegarse en un servicio que soporte Node y WebSockets (Vercel Serverless no soporta Socket.io de forma estándar).
-
-- **Variables de entorno en producción:** `MONGODB_URI` es obligatoria (ej. MongoDB Atlas). Opcionales: `PORT` (lo inyecta el host), `MONGODB_MAX_POOL_SIZE`, timeouts.
-- **CORS:** La API usa `enableCors()`. Si restringes orígenes, añade la URL del frontend (ej. `https://tu-app.vercel.app`).
-- **Health check:** El host puede usar `GET /health` para comprobar que la API y MongoDB responden.
+1. Conecta el repositorio en Railway.
+2. Railway detecta el monorepo; puedes configurar **dos servicios** (o uno por app según tu preferencia):
+   - **API:** Root `apps/api`, comando de build `pnpm run build` (o desde raíz `pnpm --filter api run build`), start `pnpm run start:prod` (o el que exponga el binario de Nest).
+   - **Client:** Root `apps/client`, build y start estándar de Next.js.
+3. **Variables de entorno:**
+   - **API:** `MONGODB_URI` obligatoria (ej. MongoDB Atlas). Opcionales: `PORT`, `MONGODB_MAX_POOL_SIZE`, timeouts.
+   - **Client:** `NEXT_PUBLIC_API_URL` con la URL pública de la API (sin barra final), ej. `https://tu-api.railway.app`.
+4. **CORS:** La API usa `enableCors()`. Si restringes orígenes, añade la URL del frontend (ej. la URL que Railway asigne al cliente).
+5. **Health check:** El host puede usar `GET /health` para comprobar que la API y MongoDB responden.
 
 ## Estructura del Proyecto
 
@@ -431,7 +429,7 @@ cd apps/client && pnpm cypress:run
 | `MongooseServerSelectionError` o "IP not whitelisted" | Con Atlas: en **Network Access** añade `0.0.0.0/0` o tu IP. Comprueba usuario/contraseña y que la base exista en la URI. |
 | Puerto 3000 o 4000 en uso | Cambia `PORT` en `apps/api/.env` o ejecuta el cliente en otro puerto (`next dev -p 3001`). |
 | El cliente no conecta a la API | Revisa `NEXT_PUBLIC_API_URL` en el cliente (por defecto `http://localhost:4000`). En producción debe ser la URL pública de la API. |
-| WebSocket no conecta | Misma base URL que REST. Si la API está detrás de un proxy, asegura que WebSockets estén habilitados (Vercel no soporta Socket.io en serverless). |
+| WebSocket no conecta | Misma base URL que REST. Si la API está detrás de un proxy, asegura que WebSockets estén habilitados (Railway los soporta por defecto). |
 | `pnpm dev` no arranca MongoDB | El script intenta `docker compose up -d`. Si no usas Docker, crea `apps/api/.env` con `MONGODB_URI` (ej. Atlas). |
 
 ## Posibles Mejoras Futuras
