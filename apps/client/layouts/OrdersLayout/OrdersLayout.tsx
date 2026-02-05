@@ -103,16 +103,6 @@ export default function OrdersLayout({ initialSimulationStatus }: OrdersLayoutPr
 					<div className={s["pk-layout__navbar-actions-group"]}>
 						<button
 							type="button"
-							className={s["pk-layout__create-order-btn"]}
-							onClick={() => setCreateOrderOpen(true)}
-							aria-label="Crear orden"
-							title="Crear orden"
-							data-cy="create-order-btn"
-						>
-							<Plus className={s["pk-layout__create-order-icon"]} size={20} aria-hidden />
-						</button>
-						<button
-							type="button"
 							className={`${s["pk-layout__metrics-btn"]} ${metricsOpen ? s["pk-layout__metrics-btn--selected"] : ""}`}
 							onClick={() => setMetricsOpen(true)}
 							aria-label="Métricas"
@@ -121,6 +111,16 @@ export default function OrdersLayout({ initialSimulationStatus }: OrdersLayoutPr
 							data-cy="metrics-btn"
 						>
 							<BarChart3 className={s["pk-layout__metrics-icon"]} size={20} aria-hidden />
+						</button>
+						<button
+							type="button"
+							className={s["pk-layout__create-order-btn"]}
+							onClick={() => setCreateOrderOpen(true)}
+							aria-label="Crear orden"
+							title="Crear orden"
+							data-cy="create-order-btn"
+						>
+							<Plus className={s["pk-layout__create-order-icon"]} size={20} aria-hidden />
 						</button>
 						<button
 						type="button"
