@@ -1,5 +1,7 @@
 # KDS - Kitchen Display System
 
+![Social preview - KDS Kitchen Display System](docs/social-preview.png)
+
 Sistema de gestión de órdenes en tiempo real para cocinas de restaurantes. Visualiza y gestiona pedidos ficticios de plataformas de delivery (Glovo, Uber Eats, Just Eat, etc...) de forma eficiente.
 
 **En producción (Railway):** [Cliente](https://kds-client.up.railway.app) · [API](https://kds-api.up.railway.app) · [Swagger](https://kds-api.up.railway.app/docs)
