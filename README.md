@@ -69,7 +69,7 @@ Principales decisiones implementadas y su justificación:
 **Requisitos:** Node.js 18+, pnpm 8+. Para MongoDB en desarrollo: [Docker](https://www.docker.com/) **o** [MongoDB Atlas](https://www.mongodb.com/atlas). En producción se usa siempre Atlas (no hace falta Docker).
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/sduquear/kds-challenge.git
 cd kds-challenge
 pnpm install
 ```
@@ -92,7 +92,7 @@ pnpm dev
 
 ## Variables de entorno
 
-En la API se usan **las mismas variables** en local y en producción; solo cambian los valores. Archivos: `.env.local` (desarrollo) y `.env.production` (producción). No subas estos archivos a git.
+En la API se usan **las mismas variables** en local y en producción; solo cambian los valores. Archivos: `.env.local` (desarrollo) y `.env.production` (producción).
 
 | App    | Archivo                    | Variables             | Descripción                                        |
 | ------ | -------------------------- | --------------------- | -------------------------------------------------- |
@@ -107,6 +107,7 @@ En la API se usan **las mismas variables** en local y en producción; solo cambi
 
 | Script            | Descripción                                                                     |
 | ----------------- | ------------------------------------------------------------------------------- |
+| `pnpm install`    | Instala las dependencias de API + Client + Shared                               |
 | `pnpm dev`        | Comprueba Docker/MongoDB (`try-docker.js`) y arranca API + Client en desarrollo |
 | `pnpm build:prod` | Compila shared, API y Client para producción                                    |
 | `pnpm prod`       | Build de producción + API + Client en paralelo (sin Docker)                     |
@@ -172,7 +173,7 @@ kds/
 
 ## Mejoras futuras
 
-Filtros, drag & drop, autenticación, integración real con terceros, etc...
+Búsquedas, filtros, drag & drop, autenticación, integración real con terceros, etc...
 
 ---
 
