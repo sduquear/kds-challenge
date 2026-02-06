@@ -15,6 +15,10 @@ import { HealthModule } from './health/health.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [
+        process.env.NODE_ENV === 'production' ? '.env.production' : '.env.local',
+        '.env',
+      ],
       load: [appConfig],
       validationSchema,
     }),

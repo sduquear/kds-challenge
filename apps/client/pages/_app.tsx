@@ -6,11 +6,18 @@ import { ToastProvider } from "@/contexts/Toast.context"
 import "@/styles/globals.scss"
 import type { AppProps } from "next/app"
 import Head from "next/head"
+import { useEffect } from "react"
 import type { IndexPageProps } from "./index"
 
 type PageProps = IndexPageProps
 
+const env = process.env.NODE_ENV ?? "development"
+
 export default function App({ Component, pageProps }: AppProps<PageProps>) {
+	useEffect(() => {
+		console.log("🚀 Entorno:", env)
+	}, [])
+
 	return (
 		<>
 			<Head>

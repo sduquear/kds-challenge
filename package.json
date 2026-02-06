@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "node scripts/try-docker.js && concurrently -n \"CLIENT,API\" -c \"bgBlue.bold,bgMagenta.bold\" \"pnpm --filter client dev\" \"pnpm --filter api start:dev\"",
+    "build:prod": "pnpm --filter @kds/shared build && pnpm --filter api build && pnpm --filter client build",
+    "prod": "pnpm run build:prod && concurrently -n \"CLIENT,API\" -c \"bgBlue.bold,bgMagenta.bold\" \"pnpm --filter client start\" \"pnpm --filter api start:prod\"",
     "test:unit": "concurrently -n \"API,CLIENT\" -c \"bgMagenta.bold,bgBlue.bold\" \"pnpm --filter api test:unit\" \"pnpm --filter client test:unit\"",
     "test:e2e": "concurrently -n \"API,CLIENT\" -c \"bgMagenta.bold,bgBlue.bold\" \"pnpm --filter api test:e2e\" \"pnpm --filter client test:e2e\""
   },

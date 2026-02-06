@@ -6,8 +6,6 @@ import { validationExceptionFactory } from './common/validation-error.util';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import type { AppConfig } from './config/app-config.interface';
 import { AppModule } from './app.module';
-import { readFileSync, unlinkSync, existsSync } from 'fs';
-import { join } from 'path';
 
 const logger = new Logger('Bootstrap');
 const PREFIX = {
@@ -16,22 +14,14 @@ const PREFIX = {
   error: '❌',
 };
 
+function getEnv(): string {
+  const env = process.env.NODE_ENV ?? 'development';
+  return env === 'production' ? 'production' : 'development';
+}
+
 async function bootstrap() {
-  const possiblePaths = [
-    join(process.cwd(), '.docker-status.txt'),
-    join(process.cwd(), '..', '.docker-status.txt'),
-    join(process.cwd(), '..', '..', '.docker-status.txt'),
-  ];
-  for (const statusPath of possiblePaths) {
-    if (existsSync(statusPath)) {
-      try {
-        const message = readFileSync(statusPath, 'utf8').trim();
-        if (message) logger.log(`${PREFIX.info} ${message}`);
-        unlinkSync(statusPath);
-      } catch {}
-      break;
-    }
-  }
+  const env = getEnv();
+  logger.log(`${PREFIX.info} Entorno: ${env}`);
 
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
@@ -89,12 +79,10 @@ async function bootstrap() {
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-  logger.log(
-    `${PREFIX.info} Application is running on: http://localhost:${port}`,
-  );
-  logger.log(
-    `${PREFIX.info} Swagger is running on: http://localhost:${port}/docs`,
-  );
+  const host = env === 'production' ? '0.0.0.0' : 'localhost';
+  const baseUrl = `http://${host}:${port}`;
+  logger.log(`${PREFIX.info} Application is running on: ${baseUrl}`);
+  logger.log(`${PREFIX.info} Swagger is running on: ${baseUrl}/docs`);
 }
 bootstrap().catch((err) => {
   logger.error(`${PREFIX.error} Bootstrap failed`, err?.stack ?? err);
