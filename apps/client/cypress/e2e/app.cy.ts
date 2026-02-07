@@ -38,9 +38,7 @@ describe("KDS", () => {
     });
 
     it("muestra órdenes cuando la API devuelve datos (fixture)", () => {
-      cy.fixture("orders").then((orders) => {
-        cy.intercept("GET", "**/orders", { statusCode: 200, body: orders }).as("getOrders");
-      });
+      cy.intercept("GET", "**/orders*", { fixture: "orders" }).as("getOrders");
       cy.intercept("GET", "**/simulation/status", {
         statusCode: 200,
         body: { isRunning: false },
