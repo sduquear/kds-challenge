@@ -179,5 +179,5 @@ Búsquedas, filtros, drag & drop, autenticación, integración real con terceros
 
 ---
 
-Desarrollado como prueba técnica para Platomico.  
+Desarrollado como prueba técnica para [Platomico](https://www.platomico.com/).  
 **Tecnologías:** TypeScript, NestJS, Next.js, MongoDB, Socket.io, pnpm Workspaces

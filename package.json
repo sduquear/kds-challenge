@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node scripts/try-docker.js && concurrently -n \"CLIENT,API\" -c \"bgBlue.bold,bgMagenta.bold\" \"pnpm --filter client dev\" \"pnpm --filter api start:dev\"",
+    "dev": "node scripts/try-docker.js && concurrently -n \"SHARED,CLIENT,API\" -c \"bgYellow.bold,bgBlue.bold,bgMagenta.bold\" \"pnpm --filter @kds/shared dev\" \"pnpm --filter client dev\" \"pnpm --filter api start:dev\"",
     "build:prod": "pnpm --filter @kds/shared build && pnpm --filter api build && pnpm --filter client build",
     "prod": "pnpm run build:prod && concurrently -n \"CLIENT,API\" -c \"bgBlue.bold,bgMagenta.bold\" \"pnpm --filter client start\" \"pnpm --filter api start:prod\"",
     "test:unit": "concurrently -n \"API,CLIENT\" -c \"bgMagenta.bold,bgBlue.bold\" \"pnpm --filter api test:unit\" \"pnpm --filter client test:unit\"",
