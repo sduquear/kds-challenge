@@ -9,6 +9,7 @@ import {
 } from './entities/counter.entity';
 import { isMongooseCastError } from '../common/types/mongo-error.types';
 import type { Order as IOrder } from '@kds/shared';
+import { MAX_ORDERS } from '@kds/shared';
 
 @Injectable()
 export class OrdersRepository {
@@ -18,10 +19,20 @@ export class OrdersRepository {
     private readonly counterModel: Model<CounterDocument>,
   ) {}
 
-  async findAll(): Promise<IOrder[]> {
+  async countTotal(): Promise<number> {
+    return this.orderModel.countDocuments({}).exec();
+  }
+
+  async findAll(
+    filter: Record<string, any> = {},
+    limit = MAX_ORDERS,
+    offset = 0,
+  ): Promise<IOrder[]> {
     return this.orderModel
-      .find()
+      .find(filter)
       .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
       .lean<IOrder[]>()
       .exec();
   }

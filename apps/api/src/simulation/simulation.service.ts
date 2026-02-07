@@ -94,6 +94,12 @@ export class SimulationService {
 
       this.logger.log(`New order created: ${savedOrder.externalId}`);
     } catch (error) {
+      if (error instanceof Error && error.message === 'ORDER_LIMIT_REACHED') {
+         this.logger.warn('Order limit reached. Stopping simulation.');
+         this.stop();
+         this.ordersService.getGateway().notifyOrderLimitReached();
+         return;
+      }
       this.logger.error(
         `Error creating simulated order: ${error instanceof Error ? error.message : 'Unknown error'}`,
       );

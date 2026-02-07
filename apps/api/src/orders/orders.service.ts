@@ -3,10 +3,11 @@ import {
   NotFoundException,
   BadRequestException,
   ConflictException,
+  ServiceUnavailableException,
   Logger,
 } from '@nestjs/common';
 import type { Order as ApiOrder } from '@kds/shared';
-import { OrderStatus } from '@kds/shared';
+import { OrderStatus, MAX_ORDERS } from '@kds/shared';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order, OrderDocument } from './entities/order.entity';
@@ -24,6 +25,10 @@ export class OrdersService {
     private readonly ordersRepo: OrdersRepository,
     private readonly ordersGateway: OrdersGateway,
   ) {}
+
+  getGateway() {
+    return this.ordersGateway;
+  }
 
   private readonly allowedTransitions: Record<OrderStatus, OrderStatus[]> = {
     [OrderStatus.PENDING]: [OrderStatus.IN_PROGRESS],
@@ -137,6 +142,13 @@ export class OrdersService {
     };
 
     try {
+      const activeCount = await this.ordersRepo.countTotal();
+      if (activeCount >= MAX_ORDERS) {
+        throw new ServiceUnavailableException(
+          `Límite de ${MAX_ORDERS} órdenes alcanzado.`,
+        );
+      }
+
       const savedOrder = await this.ordersRepo.create(payload);
 
       this.ordersGateway.notifyNewOrder(savedOrder);
@@ -155,8 +167,18 @@ export class OrdersService {
     }
   }
 
-  async findAll(): Promise<ApiOrder[]> {
-    return this.ordersRepo.findAll();
+  async findAll(
+    status?: OrderStatus,
+    limit = MAX_ORDERS,
+    offset = 0,
+  ): Promise<ApiOrder[]> {
+    const filter: Record<string, any> = {};
+
+    if (status) {
+      filter.status = status;
+    }
+
+    return this.ordersRepo.findAll(filter, limit, offset);
   }
 
   async findOne(id: string): Promise<Order> {

@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
+import { OrderStatus } from '@kds/shared';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -35,8 +37,12 @@ export class OrdersController {
     description: 'The list of orders.',
     type: [Order],
   })
-  findAll() {
-    return this.ordersService.findAll();
+  findAll(
+    @Query('status') status?: OrderStatus,
+    @Query('limit') limit?: number,
+    @Query('offset') offset?: number,
+  ) {
+    return this.ordersService.findAll(status, limit, offset);
   }
 
   @Get(':id')

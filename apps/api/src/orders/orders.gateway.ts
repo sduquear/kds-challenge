@@ -16,4 +16,8 @@ export class OrdersGateway {
   notifyOrderUpdated(order: any) {
     this.server.emit('order_updated', order);
   }
+
+  notifyOrderLimitReached() {
+    this.server.emit('order_limit_reached');
+  }
 }
