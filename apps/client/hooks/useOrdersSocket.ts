@@ -8,6 +8,7 @@ const isDev = process.env.NODE_ENV === 'development';
 export type OrdersSocketCallbacks = {
   onOrderCreated?: (order: Order) => void;
   onOrderUpdated?: (order: Order) => void;
+  onOrderLimitReached?: () => void;
 };
 
 export type UseOrdersSocketReturn = {
@@ -58,6 +59,11 @@ export function useOrdersSocket(callbacks: OrdersSocketCallbacks): UseOrdersSock
     socket.on('order_updated', (order: Order) => {
       if (isDev) console.log('[WS] Order updated:', order.externalId, '->', order.status);
       callbacksRef.current.onOrderUpdated?.(order);
+    });
+
+    socket.on('order_limit_reached', () => {
+      if (isDev) console.log('[WS] Order limit reached');
+      callbacksRef.current.onOrderLimitReached?.();
     });
 
     return () => {

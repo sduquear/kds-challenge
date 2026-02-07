@@ -18,8 +18,14 @@ export type CreateOrderPayload = {
 export type UpdateOrderPayload = Partial<CreateOrderPayload>;
 
 export const apiService = {
-  async getOrders(): Promise<Order[]> {
-    const response = await fetch(`${API_URL}/orders`);
+  	async getOrders(status?: string, limit?: number, offset?: number): Promise<Order[]> {
+		const params = new URLSearchParams();
+		if (status) params.append('status', status);
+		if (limit) params.append('limit', limit.toString());
+		if (offset) params.append('offset', offset.toString());
+
+		const query = params.toString() ? `?${params.toString()}` : '';
+		const response = await fetch(`${API_URL}/orders${query}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch orders: ${response.statusText}`);
