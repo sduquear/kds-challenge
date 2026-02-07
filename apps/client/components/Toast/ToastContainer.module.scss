@@ -46,6 +46,16 @@
     background: $tertiary;
     color: $white;
   }
+
+  &.error {
+    background: #ae191a;
+    color: $white;
+  }
+
+  &.warning {
+    background: #f59e0b;
+    color: $white;
+  }
 }
 
 [data-theme="dark"] {
@@ -59,6 +69,16 @@
 
     &.success {
       background: #059669;
+      color: #fff;
+    }
+
+    &.error {
+      background: #991b1b;
+      color: #fff;
+    }
+
+    &.warning {
+      background: #b45309;
       color: #fff;
     }
   }
@@ -128,6 +148,7 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
