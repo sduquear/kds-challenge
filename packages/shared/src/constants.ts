@@ -1,1 +1,2 @@
 export const MAX_ORDERS = 500;
+export const ORDER_LIMIT_REACHED_CODE = 'ORDER_LIMIT_REACHED';

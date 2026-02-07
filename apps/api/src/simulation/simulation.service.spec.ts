@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SimulationService } from './simulation.service';
 import { OrdersService } from '../orders/orders.service';
+import { ORDER_LIMIT_REACHED_CODE } from '@kds/shared';
 
 describe('SimulationService', () => {
   let service: SimulationService;
@@ -113,6 +114,28 @@ describe('SimulationService', () => {
         expect.stringContaining('Error creating simulated order'),
       );
       logSpy.mockRestore();
+    });
+
+    it('should stop simulation and notify gateway when ORDER_LIMIT_REACHED_CODE error occurs', async () => {
+      ordersService.create.mockRejectedValueOnce(
+        new Error(ORDER_LIMIT_REACHED_CODE),
+      );
+      const gatewayMock = { notifyOrderLimitReached: jest.fn() };
+      const getGatewayMock = jest.fn().mockReturnValue(gatewayMock);
+      (ordersService as any).getGateway = getGatewayMock;
+
+      const stopSpy = jest.spyOn(service, 'stop' as any);
+      const logSpy = jest.spyOn(service['logger'], 'warn').mockImplementation();
+
+      service.toggleSimulation(); // Start running state
+      await (service as any).runScheduledOrder();
+
+      expect(stopSpy).toHaveBeenCalled();
+      expect(gatewayMock.notifyOrderLimitReached).toHaveBeenCalled();
+      expect(service.getStatus().isRunning).toBe(false);
+
+      logSpy.mockRestore();
+      stopSpy.mockRestore();
     });
   });
 });

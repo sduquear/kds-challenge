@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, HttpException } from '@nestjs/common';
 import { OrdersService } from '../orders/orders.service';
-import { OrderStatus } from '@kds/shared';
+import { OrderStatus, ORDER_LIMIT_REACHED_CODE } from '@kds/shared';
 import { CreateOrderDto } from '../orders/dto/create-order.dto';
 
 @Injectable()
@@ -94,7 +94,13 @@ export class SimulationService {
 
       this.logger.log(`New order created: ${savedOrder.externalId}`);
     } catch (error) {
-      if (error instanceof Error && error.message === 'ORDER_LIMIT_REACHED') {
+      const response = error instanceof HttpException ? error.getResponse() : null;
+      const isLimitReached =
+        (error instanceof Error && error.message === ORDER_LIMIT_REACHED_CODE) ||
+        (typeof response === 'string' && response === ORDER_LIMIT_REACHED_CODE) ||
+        (typeof response === 'object' && response !== null && (response as any).message === ORDER_LIMIT_REACHED_CODE);
+
+      if (isLimitReached) {
          this.logger.warn('Order limit reached. Stopping simulation.');
          this.stop();
          this.ordersService.getGateway().notifyOrderLimitReached();

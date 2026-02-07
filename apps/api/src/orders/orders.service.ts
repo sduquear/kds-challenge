@@ -7,7 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import type { Order as ApiOrder } from '@kds/shared';
-import { OrderStatus, MAX_ORDERS } from '@kds/shared';
+import { OrderStatus, MAX_ORDERS, ORDER_LIMIT_REACHED_CODE } from '@kds/shared';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order, OrderDocument } from './entities/order.entity';
@@ -144,9 +144,7 @@ export class OrdersService {
     try {
       const activeCount = await this.ordersRepo.countTotal();
       if (activeCount >= MAX_ORDERS) {
-        throw new ServiceUnavailableException(
-          `Límite de ${MAX_ORDERS} órdenes alcanzado.`,
-        );
+        throw new ServiceUnavailableException(ORDER_LIMIT_REACHED_CODE);
       }
 
       const savedOrder = await this.ordersRepo.create(payload);
@@ -200,8 +198,9 @@ export class OrdersService {
 
     const payload = { ...updateOrderDto };
     if (payload.externalId != null) {
-      (payload as Record<string, string>).externalId =
-        payload.externalId.trim().toUpperCase();
+      (payload as Record<string, string>).externalId = payload.externalId
+        .trim()
+        .toUpperCase();
     }
     if (updateOrderDto.items != null && updateOrderDto.items.length > 0) {
       (payload as Record<string, unknown>).total = this.computeOrderTotal(

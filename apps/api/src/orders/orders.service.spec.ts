@@ -12,6 +12,7 @@ describe('OrdersService', () => {
     findAll: jest.Mock;
     findById: jest.Mock;
     getNextManualSequence: jest.Mock;
+    countTotal: jest.Mock;
     create: jest.Mock;
     updateById: jest.Mock;
     setRiderArrivedAt: jest.Mock;
@@ -49,6 +50,7 @@ describe('OrdersService', () => {
       findAll: jest.fn().mockResolvedValue([mockOrder]),
       findById: jest.fn().mockResolvedValue(mockOrder),
       getNextManualSequence: jest.fn().mockResolvedValue(1),
+      countTotal: jest.fn().mockResolvedValue(1),
       create: jest.fn().mockImplementation((payload: Record<string, unknown>) =>
         Promise.resolve({
           ...payload,
