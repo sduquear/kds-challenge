@@ -29,7 +29,7 @@
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
-    
+
     &--connected {
       background-color: #22c55e;
       box-shadow: 0 0 8px #22c55e;
@@ -164,7 +164,8 @@
   // Riders: crece con el contenido hasta un máximo que deja siempre ~2 pedidos visibles en Historial
   &--riders {
     flex: 0 0 auto;
-    max-height: calc(100% - 152px); /* 140px Historial mínimo + 12px gap */
+    max-height: calc(100% - 152px);
+    /* 140px Historial mínimo + 12px gap */
     overflow: hidden;
 
     @media (min-width: 768px) and (max-width: 1199px) {
@@ -402,25 +403,31 @@
     margin-top: 4px;
   }
 
-  &__stats + &__stats {
+  &__stats+&__stats {
     margin-top: 8px;
   }
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
 }
 
 @keyframes pulse-dot {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.5;
     transform: scale(0.8);

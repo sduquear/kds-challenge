@@ -14,26 +14,26 @@ type PageProps = IndexPageProps
 const env = process.env.NODE_ENV ?? "development"
 
 export default function App({ Component, pageProps }: AppProps<PageProps>) {
-	useEffect(() => {
-		console.log("🚀 Entorno:", env)
-	}, [])
+  useEffect(() => {
+    console.log("🚀 Entorno:", env)
+  }, [])
 
-	return (
-		<>
-			<Head>
-				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				<title>Pink&apos;s KDS: Krazy Display Service</title>
-			</Head>
-			<ThemeProvider>
-			<SoundProvider>
-				<ToastProvider>
-					<OrdersProvider initialOrders={pageProps.initialOrders} initialNow={pageProps.initialNow}>
-						<Component {...pageProps} />
-						<ToastContainer />
-					</OrdersProvider>
-				</ToastProvider>
-			</SoundProvider>
-		</ThemeProvider>
-		</>
-	)
+  return (
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Pink&apos;s KDS: Krazy Display Service</title>
+      </Head>
+      <ThemeProvider>
+        <SoundProvider>
+          <ToastProvider>
+            <OrdersProvider initialOrders={pageProps.initialOrders}>
+              <Component {...pageProps} />
+              <ToastContainer />
+            </OrdersProvider>
+          </ToastProvider>
+        </SoundProvider>
+      </ThemeProvider>
+    </>
+  )
 }
